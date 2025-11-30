@@ -1,0 +1,263 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+ --GL_L_purple: #c28df7;
+ --GL_D_purple: #663399;
+ --GL_L_green: rgb(131, 189, 131);
+ --GL_D_green: rgb(24, 118, 24);
+ --GL_L_blue: rgb(109, 109, 219);
+ --GL_white: white;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: var(--GL_white);
+  color: #333;
+}
+
+.site-header {
+  background: white;
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* logo on left, nav on right */
+}
+
+.logo-link {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.logo {
+  display: block;
+  width: auto;
+  height: 85px; 
+}
+
+.nav-links {
+  display: flex;
+  gap: 4rem; /* space between buttons */
+  align-items: center;
+  min-height: 110px;     
+}
+
+.nav-link {
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  font-size: 1.5rem; /* make text larger */
+  cursor: pointer;
+  font-family: 'Georgia', serif; /* change font here */
+}
+
+.nav-link:hover {
+  color: var(--GL_D_purple);           /* brand color on hover */
+}
+
+.content {
+  max-width: 1000px;       /* keeps content from being too wide */
+  margin: 2rem auto;      /* centers content horizontally, adds top/bottom space */
+  padding: 1rem;          /* space inside content box */
+  background: white;      /* content box is white */
+  border-radius: 8px;     /* rounded corners */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* subtle shadow */
+}
+
+.content-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.header-placeholder {
+  min-height: 110px; /* reserves space before header loads */
+}
+
+/* 1) Positioning for top level and nested levels */
+.menu-item,
+.submenu li.has-submenu { position: relative; }
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  list-style: none;
+  display: none;
+  z-index: 100;
+}
+
+/* NESTED panels open to the right of their parent item */
+.submenu li.has-submenu > .submenu {
+  top: -1px;
+  left: 100%;
+  margin-left: 0;   /* tiny overlap removes the "gap" that causes flicker */
+}
+
+/* 2) Only open the submenu of the item you're actually hovering */
+.has-submenu:hover > .submenu { display: block; }      /* top level */
+.submenu li.has-submenu:hover > .submenu { display: block; } /* nested */
+
+/* 3) Make the link area solid and easy to hit */
+.submenu a,
+.submenu .submenu-trigger,
+.nav-link { 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+  color: #222;
+  text-decoration: none;
+}
+
+.submenu a:hover { background: #f5f5f5; }
+
+/* 4) Arrows – flip only for the hovered/open branch */
+.chev {
+  display: inline-block;
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid currentColor; /* ▼ */
+  margin-left: 0.35rem;
+  position: relative; top: -2px;
+  transition: transform 150ms ease;
+}
+
+.chev-right {
+  display: inline-block;
+  width: 0; height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid currentColor; /* ▶ */
+  margin-left: 0.35rem;
+  position: relative; top: -1px;
+  transition: transform 150ms ease;
+}
+
+/* Flip only the active branch arrows */
+.menu-item:hover   > .nav-link .chev         { transform: rotate(180deg); } /* ▼→▲ */
+.menu-item.open    > .nav-link .chev         { transform: rotate(180deg); }
+.submenu li.has-submenu:hover > .submenu-trigger .chev-right { transform: rotate(90deg); } /* ▶→▼ */
+.submenu li.has-submenu.open  > .submenu-trigger .chev-right { transform: rotate(90deg); }
+
+/* container for movement section */
+.move {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* the image itself */
+.move-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* fill the box */
+  object-position: center 55%;    /* ← THIS centers the important part */
+}
+
+.full-photo-block-home {
+  width: 100%;
+  height: 350px; 
+  overflow: hidden;
+}
+
+.full-photo-row {
+  width: 100%;         /* same height as your main hero */
+  display: flex;          /* puts the images side-by-side */
+}
+
+.stretch-img {
+  width: 100%;             /* each image gets half the screen */
+  height: 600px;           /* same height */
+  object-fit: cover;      /* crop correctly */
+  object-position: center; /* keep the important part visible */
+  display: block;
+}
+
+.stretch-img-pumps {
+  width: 100%;             /* each image gets half the screen */
+  height: 500px;           /* same height */
+  object-fit: cover;      /* crop correctly */
+  object-position: center 1%; /* keep the important part visible */
+  display: block;
+}
+
+.photo-block {
+  flex: 1;            /* each takes up 50% of the row */
+  text-align: center;
+}
+
+.photo-label {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  color: #333;
+}
+
+.single-centered-photo {
+  width: 100%;
+  display: flex;
+  justify-content: center;   /* horizontal centering */
+  overflow: hidden;
+}
+
+.single-centered-photo-img {
+  width: 20%;                 /* 50% of the page */
+  height: 300px;              /* same height you used */
+  object-fit: cover;          /* crop correctly */
+  object-position: center;    /* center the subject */
+  display: block;
+}
+
+video {
+  display: block;
+}
+
+/* the text under the image */
+.move-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Slide from LEFT → RIGHT */
+.slide-right {
+  animation: slideInFromLeft 0.8s ease-out forwards;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide from RIGHT → LEFT */
+.slide-left {
+  animation: slideInFromRight 0.8s ease-out forwards;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
