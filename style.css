@@ -28,17 +28,6 @@ body {
   justify-content: space-between; /* logo on left, nav on right */
 }
 
-.logo-link {
-  display: inline-block;
-  cursor: pointer;
-}
-
-.logo {
-  display: block;
-  width: auto;
-  height: 85px; 
-}
-
 .nav-links {
   display: flex;
   gap: 4rem; /* space between buttons */
