@@ -229,35 +229,3 @@ video {
   font-size: 1.1rem;
   line-height: 1.6;
 }
-
-/* Slide from LEFT → RIGHT */
-.slide-right {
-  animation: slideInFromLeft 0.8s ease-out forwards;
-}
-
-@keyframes slideInFromLeft {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Slide from RIGHT → LEFT */
-.slide-left {
-  animation: slideInFromRight 0.8s ease-out forwards;
-}
-
-@keyframes slideInFromRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
