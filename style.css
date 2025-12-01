@@ -22,7 +22,7 @@ body {
 
 .site-header {
   background: white;
-  padding: 0.5rem 1.0rem;
+  padding: 0.5rem 0.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between; /* logo on left, nav on right */
