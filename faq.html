@@ -12,7 +12,116 @@
   <script src="header.js" defer></script>
   <main>
     <div class="content">
-      <p>FAQ</p>
+      <h1>Frequently Asked Questions (FAQ)</h1>
+
+<p>
+  This page collects common questions that someone new to SPEC might have,
+  especially around installation, running the software, and using external
+  resources like the camera or IMU.
+</p>
+
+<hr>
+
+<h2>1. What do I need installed before I can run SPEC?</h2>
+<p>
+  SPEC is designed to install most of its own dependencies automatically, but
+  you should have the following first:
+</p>
+<ul>
+  <li>A supported operating system (Linux / macOS / WSL on Windows).</li>
+  <li><strong>Git</strong> so you can clone the repository.</li>
+  <li>A terminal that can run Bash scripts.</li>
+</ul>
+<p>
+  After that, you just run <code>setup/set_up_system.sh</code>, which installs
+  the remaining software (Python packages, libraries, and tools used by SPEC).
+</p>
+
+<hr>
+
+<h2>2. I ran <code>set_up_system.sh</code> but I still get errors. What can I do?</h2>
+<p>
+  The most common problems when running the setup script are:
+</p>
+<ul>
+  <li><strong>Permission errors</strong> – try running <code>chmod +x set_up_system.sh</code> first.</li>
+  <li><strong>Missing system package manager</strong> – make sure your OS has the package manager
+      expected by the script (e.g., <code>apt</code> on Ubuntu).</li>
+  <li><strong>Old Python version</strong> – verify that your Python version matches what SPEC expects.</li>
+</ul>
+<p>
+  Check the terminal output and the log file (if generated) for the exact
+  message. If a specific dependency failed to install, you can usually fix it
+  by installing that package manually and then re-running the script.
+</p>
+
+<hr>
+
+<h2>3. The camera / IMU is not detected. How do I fix this?</h2>
+<p>
+  SPEC can run even without hardware, but to use live data you need the OS to
+  see the devices first.
+</p>
+<ul>
+  <li>Make sure the camera or IMU is physically plugged in and powered.</li>
+  <li>On Linux, check that your user has permission to access the device
+      (e.g., <code>/dev/video0</code> or <code>/dev/i2c-1</code>).</li>
+  <li>Try unplugging and re-plugging the device, then restart SPEC.</li>
+  <li>If the IMU path is hard-coded, verify that the device name matches your system.</li>
+</ul>
+<p>
+  If the device is unavailable, SPEC will usually show a message like
+  “IMU disabled” but other features (video processing, PIV) will still work.
+</p>
+
+<hr>
+
+<h2>4. PIV or video processing is very slow. Is that normal?</h2>
+<p>
+  PIV and frame extraction can be compute-heavy, especially for long, high-
+  resolution videos. You can speed things up by:
+</p>
+<ul>
+  <li>Using a shorter test clip while experimenting.</li>
+  <li>Reducing the resolution of the source video.</li>
+  <li>Lowering the frame rate during extraction (for example 10 fps instead of 60 fps).</li>
+  <li>Adjusting PIV parameters (larger interrogation windows or fewer passes).</li>
+</ul>
+<p>
+  Once you’re happy with the settings, you can run the full-resolution dataset.
+</p>
+
+<hr>
+
+<h2>5. Are there any common “gotchas” when using SPEC?</h2>
+<ul>
+  <li><strong>Wrong working directory:</strong> many scripts assume you are in the project root
+      when running commands. If you get “file not found” errors, check your current directory.</li>
+  <li><strong>Hard-coded paths:</strong> if you move videos or output folders, update the config
+      or command-line arguments accordingly.</li>
+  <li><strong>Case-sensitive filenames:</strong> on Linux, <code>Data.mp4</code> and
+      <code>data.mp4</code> are different files, so make sure the names match exactly.</li>
+</ul>
+
+<hr>
+
+<h2>6. Are there any issues with external resources or services?</h2>
+<p>
+  SPEC primarily relies on open-source libraries installed locally
+  (e.g., Python packages for image processing and numerical analysis). Potential
+  issues include:
+</p>
+<ul>
+  <li>Library version mismatches when running on a different machine than the
+      one used for development.</li>
+  <li>OS-specific dependencies (for example, some camera libraries behave
+      differently on Windows vs. Linux).</li>
+</ul>
+<p>
+  If you encounter a version-specific bug, note the OS and versions of Python
+  and the failing library so it can be reproduced and fixed.
+</p>
+
     </div>
   </main>
 </body>
