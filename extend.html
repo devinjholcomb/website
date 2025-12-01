@@ -12,7 +12,155 @@
   <script src="header.js" defer></script>
   <main>
     <div class="content">
-      <p>To extend or modify the software all you have to do is change the existing code and then repush the updated version to the raspberry pi.</p>
+      <h1>How to Modify or Extend SPEC</h1>
+
+<p>
+  This page explains how someone who has already installed SPEC can make changes
+  to the code: where the important files live, how to run the project in
+  development mode, and how to run tests after making edits.
+</p>
+
+<hr>
+
+<h2>Project Structure</h2>
+
+<p>The project is organized into a few main folders:</p>
+
+<ul>
+  <li><code>setup/</code> – install script (<code>set_up_system.sh</code>) and any environment helpers.</li>
+  <li><code>src/</code> – main application source code (PIV, IMU, video processing, Flask app, etc.).</li>
+  <li><code>piv/</code> – PIV processing code (frame loading, correlation, velocity computation).</li>
+  <li><code>imu/</code> – IMU handling code (reading sensor, parsing data, plotting).</li>
+  <li><code>web/</code> – frontend templates, static files, and Flask routes.</li>
+  <li><code>tests/</code> – automated test cases for core modules.</li>
+  <li><code>data/</code> or <code>examples/</code> – example videos and sample IMU data.</li>
+</ul>
+
+<p>
+  (If your folder names are slightly different, adjust these bullets to match
+  your real layout.)
+</p>
+
+<hr>
+
+<h2>Languages and Build / Dependency Management</h2>
+
+<ul>
+  <li><strong>Language:</strong> Python 3 (replace with the exact version you use).</li>
+  <li><strong>Main entry point:</strong> something like <code>src/app.py</code> or <code>src/main.py</code>.</li>
+  <li><strong>Dependencies:</strong> listed in <code>requirements.txt</code> (or your actual file) and installed by <code>setup/set_up_system.sh</code>.</li>
+  <li><strong>Web framework:</strong> Flask (for the UI/API serving pages like the PIV and IMU screens).</li>
+</ul>
+
+<p>
+  To add or update a dependency, you typically:
+</p>
+
+<ol>
+  <li>Install it locally with <code>pip install &lt;package-name&gt;</code>.</li>
+  <li>Add it to <code>requirements.txt</code> (or your dependency file).</li>
+  <li>Re-run <code>setup/set_up_system.sh</code> or reinstall requirements on new machines.</li>
+</ol>
+
+<hr>
+
+<h2>Running SPEC in Development Mode</h2>
+
+<p>After cloning and installing, you can run SPEC from the project root:</p>
+
+<pre><code>cd spec-project          # replace with your actual folder
+python src/app.py        # or python main.py / flask run / etc.
+</code></pre>
+
+<p>
+  The application will start the web server (if using Flask) and print the URL,
+  such as <code>http://127.0.0.1:5000</code>. Open this address in a browser to
+  see the UI while you are editing code.
+</p>
+
+<hr>
+
+<h2>Making Code Changes</h2>
+
+<ol>
+  <li>Make sure the project runs in its current state (no failing tests or errors).</li>
+  <li>Create a new Git branch (recommended):
+    <pre><code>git checkout -b feature/new-piv-option</code></pre>
+  </li>
+  <li>Find the module that matches what you want to change:
+    <ul>
+      <li>PIV behavior → files in <code>piv/</code></li>
+      <li>IMU behavior → files in <code>imu/</code></li>
+      <li>Web pages / routes → files in <code>web/</code> or <code>src/routes.py</code></li>
+    </ul>
+  </li>
+  <li>Edit the code and save your changes.</li>
+  <li>Restart the app (if needed) and test your change manually.</li>
+  <li>Run the automated tests (see below).</li>
+  <li>Commit and push your changes:
+    <pre><code>git add .
+git commit -m "Describe what you changed"
+git push</code></pre>
+  </li>
+</ol>
+
+<hr>
+
+<h2>Backlog and Issue Tracking</h2>
+
+<p>
+  We track remaining work, bugs, and new feature ideas using
+  <strong>GitHub Issues</strong> (or whatever you actually use).
+</p>
+
+<ul>
+  <li>Each bug or feature request should have its own issue.</li>
+  <li>The issue should describe the problem, expected behavior, and any steps to reproduce.</li>
+  <li>When you start working on an issue, reference its number in your Git branch name and commits (e.g., <code>feature/#12-add-export-option</code>).</li>
+</ul>
+
+<p>
+  This backlog acts as the project’s “to-do list,” and someone new to SPEC can
+  read through the issues to see what still needs improvement.
+</p>
+
+<hr>
+
+<h2>Running Automated Tests</h2>
+
+<p>
+  After modifying the code, you should run the test suite to make sure nothing
+  was broken.
+</p>
+
+<ul>
+  <li>Test files live under <code>tests/</code> (e.g., <code>tests/test_piv.py</code>, <code>tests/test_imu.py</code>).</li>
+  <li>From the project root, run:
+    <pre><code>pytest</code></pre>
+    or
+    <pre><code>python -m unittest</code></pre>
+    (use whichever command your project actually uses).
+  </li>
+  <li>All tests should pass before you commit and push changes.</li>
+</ul>
+
+<hr>
+
+<h2>Code Style and Expectations</h2>
+
+<ul>
+  <li>Follow standard Python style (PEP 8) for names, spacing, and imports.</li>
+  <li>Keep functions focused: one clear responsibility per function.</li>
+  <li>Add comments where behavior is not obvious, especially around PIV math or IMU calibration.</li>
+  <li>If you add a new module or function, add at least one test for it under <code>tests/</code>.</li>
+</ul>
+
+<p>
+  By following these guidelines, contributors can safely extend SPEC with new
+  sensors, new analysis options, or new visualization features without breaking
+  existing functionality.
+</p>
+
     </div>
   </main>
 </body>
