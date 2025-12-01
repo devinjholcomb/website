@@ -30,7 +30,7 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 4rem; /* space between buttons */
+  gap: 3rem; /* space between buttons */
   align-items: center;
   min-height: 110px;     
 }
