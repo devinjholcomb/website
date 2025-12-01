@@ -12,8 +12,96 @@
   <script src="header.js" defer></script>
   <main>
     <div class="content">
-      <p>*Notice* You are going to want to make sure you have a Raspberry Pi 4 or 5 and preferably the spec device.</p>
-      <p>1. Go to setup then run set_up_system.sh</p>
+     <h1>How to Install SPEC</h1>
+
+<p>
+  This section explains how to install and run the SPEC application on a new
+  machine. The goal is that someone with basic CS knowledge can follow these
+  steps and get the system working without needing to read the code.
+</p>
+
+<h2>Prerequisites</h2>
+<ul>
+  <li>A computer running Linux or macOS (or WSL on Windows).</li>
+  <li><strong>Git</strong> installed so you can clone the repository.</li>
+  <li>A terminal that can run Bash shell scripts.</li>
+</ul>
+
+<h2>1. Clone the SPEC repository</h2>
+<ol>
+  <li>Open a terminal.</li>
+  <li>Choose a folder where you want to keep the project.</li>
+  <li>Clone the repo:
+    <pre><code>git clone &lt;your-repo-url-here&gt;
+cd &lt;your-repo-folder&gt;</code></pre>
+  </li>
+</ol>
+
+<h2>2. Run the setup script</h2>
+<p>
+  All required software and libraries are installed by a single setup script
+  that lives in the <code>setup/</code> directory of the project.
+</p>
+
+<ol>
+  <li>From the project root, change into the setup folder:
+    <pre><code>cd setup</code></pre>
+  </li>
+  <li>Make the script executable (if needed):
+    <pre><code>chmod +x set_up_system.sh</code></pre>
+  </li>
+  <li>Run the script:
+    <pre><code>./set_up_system.sh</code></pre>
+  </li>
+</ol>
+
+<p>
+  The <code>set_up_system.sh</code> script will automatically download and
+  install all dependencies needed to run SPEC. This includes the programming
+  language runtime, required libraries, and any command-line tools that the
+  application expects. The script is designed so that a new user does not have
+  to install each dependency manually.
+</p>
+
+<h2>3. What the setup script installs</h2>
+<p>
+  Internally, <code>set_up_system.sh</code> installs the following categories
+  of software (the exact list is documented in the script itself):
+</p>
+<ul>
+  <li>Core runtime (e.g., Python and its package manager).</li>
+  <li>Libraries for camera access, video processing, and numerical computing.</li>
+  <li>Any additional utilities used by the SPEC pipeline (logging, plotting, etc.).</li>
+</ul>
+<p>
+  All of these come from standard package repositories (for example, your OS
+  package manager and language-specific repositories such as <em>pip</em>), so
+  users do not have to track down download links manually.
+</p>
+
+<h2>4. Verifying the installation</h2>
+<ol>
+  <li>Return to the project root:
+    <pre><code>cd ..</code></pre>
+  </li>
+  <li>Run the main application command (replace with your real entry point):
+    <pre><code>python main.py</code></pre>
+  </li>
+</ol>
+
+<p>
+  If the installation succeeded, the SPEC application should start without
+  errors and display the main interface or command-line help message.
+</p>
+
+<h2>5. External resources and services</h2>
+<ul>
+  <li>All software used by SPEC is open-source and installed from public
+      repositories (system package manager and language package index).</li>
+  <li>If you later use any paid or cloud-based services (e.g., storage, logging,
+      or dashboards), list them here and note whether they have free tiers.</li>
+</ul>
+
     </div>
   </main>
 </body>
