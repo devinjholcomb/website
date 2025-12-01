@@ -104,7 +104,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0.7rem;
+  padding: 0.5rem 0.75rem;
   white-space: nowrap;
   color: #222;
   text-decoration: none;
