@@ -19,7 +19,7 @@ body {
 }
 
 .site-header {
-  background: grey;
+  background: lightgrey;
   padding: 0.5rem 0.5rem;
   display: flex;
   align-items: center;
@@ -67,15 +67,16 @@ body {
   min-height: 110px; /* reserves space before header loads */
 }
 
+.full-photo-block-home {
+  width: 100vw;      /* full width always */
+  height: 350px;     
+  overflow: hidden;
+}
+
 .move-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;          /* fill the box */
-  object-position: center 55%;    /* ← THIS centers the important part */
-}
-
-.full-photo-block-home {
-  width: 100%;
-  height: 350px; 
-  overflow: hidden;
+  object-fit: cover;     /* fills the block */
+  object-position: center;
+  display: block;        /* removes white gaps */
 }
