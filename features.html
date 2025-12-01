@@ -12,13 +12,181 @@
   <script src="header.js" defer></script>
   <main>
     <div class="content">
-      <p>Trapezoid Calibration: When you first sign in to the flask application click on calibrate trapeoid points, from there you can adjust the x
-      and y axis as you need. There are also additional instructions.</p>
-      <h1>Piv Functions</h1>
-      <p>Run Test: Click Run test and it will run one loop of the the piv capture system</p>
-      <p>Run Piv: Click Run Piv and it will run one loop of the piv capture system</p> 
-      <p>Start Auto Piv: Click start auto piv and this will start the automatic capturing of the piv through a continuious loop</p>
-      <p>Stop Auto Piv: Click stop auto piv and this will stop the automatic capturing of the piv</p>
+      <h1>How to Use Each Feature</h1>
+
+<p>
+  This section explains every major feature of the SPEC application and how to
+  use it from the interface. Each feature listed below corresponds to work
+  completed during your sprint cycles (setup, PIV processing, IMU processing,
+  video extraction, etc.).
+</p>
+
+<hr>
+
+<h2>1. Setup & Environment Initialization</h2>
+<p>
+  After installation, the first feature available is the <strong>Setup</strong>
+  process. This initializes the working directory, loads configuration files,
+  and prepares the system for running PIV and IMU processes.
+</p>
+
+<ul>
+  <li>Go to the <strong>Setup</strong> section in the interface.</li>
+  <li>Press <strong>Initialize System</strong>.</li>
+  <li>The application will:
+    <ul>
+      <li>Verify dependencies are installed</li>
+      <li>Create required folders (frames/, imu_data/, logs/)</li>
+      <li>Check for connected hardware (camera, IMU)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+  Once complete, the system will display a confirmation message and the next
+  features become available.
+</p>
+
+<hr>
+
+<h2>2. Extracting Frames From Video</h2>
+<p>
+  The <strong>Frame Extraction</strong> feature allows the user to input a video
+  file and automatically generate individual image frames for PIV analysis.
+</p>
+
+<ul>
+  <li>Navigate to the <strong>Video Processing</strong> page.</li>
+  <li>Click <strong>Select Video</strong> and choose your .mp4 file.</li>
+  <li>Choose the frame rate (e.g., 10 fps).</li>
+  <li>Click <strong>Extract Frames</strong>.</li>
+</ul>
+
+<p>
+  The application will display progress (e.g., “Extracting frame 42 of 389”) and
+  store frames in the <code>frames/</code> directory.
+</p>
+
+<hr>
+
+<h2>3. Running PIV (Particle Image Velocimetry)</h2>
+<p>
+  Once the frames are extracted, the PIV feature calculates velocity fields by
+  comparing movement between consecutive frames.
+</p>
+
+<ul>
+  <li>Go to the <strong>PIV</strong> section.</li>
+  <li>Select the folder containing extracted frames.</li>
+  <li>Choose PIV parameters:
+    <ul>
+      <li>Interrogation window size</li>
+      <li>Pass count (single-pass, multi-pass)</li>
+      <li>Grid resolution</li>
+    </ul>
+  </li>
+  <li>Click <strong>Run PIV</strong>.</li>
+</ul>
+
+<p>
+  The system will process each frame pair and generate:
+</p>
+
+<ul>
+  <li>Velocity vector fields</li>
+  <li>Magnitude heatmaps</li>
+  <li>CSV outputs containing vector data</li>
+</ul>
+
+<p>
+  Results appear visually on the interface and are saved into the project’s
+  output folder.
+</p>
+
+<hr>
+
+<h2>4. IMU Data Collection & Processing</h2>
+<p>
+  If a physical IMU is connected, the application can record and display motion
+  readings from the river probe.
+</p>
+
+<ul>
+  <li>Navigate to <strong>IMU</strong>.</li>
+  <li>Click <strong>Start IMU Capture</strong>.</li>
+  <li>Move the sensor during the capture period.</li>
+  <li>Click <strong>Stop</strong> to end the recording.</li>
+</ul>
+
+<p>
+  The system automatically:
+</p>
+
+<ul>
+  <li>Stores raw IMU readings</li>
+  <li>Plots accelerometer/gyroscope signals</li>
+  <li>Saves the processed CSV file</li>
+</ul>
+
+<p>
+  If the IMU is not detected, the interface will show “IMU disabled” but still
+  allow replay of past data.
+</p>
+
+<hr>
+
+<h2>5. Viewing Results (Graphs, Vectors, Outputs)</h2>
+<p>
+  Once PIV and IMU data are processed, users can view the results in the
+  <strong>Results</strong> section.
+</p>
+
+<ul>
+  <li>View velocity magnitude heatmaps</li>
+  <li>Vector overlays on original frames</li>
+  <li>IMU acceleration and rotation plots</li>
+  <li>Download CSV outputs</li>
+</ul>
+
+<p>
+  Each result includes a timestamp and is automatically saved so users can
+  re-view previous runs.
+</p>
+
+<hr>
+
+<h2>6. Running Everything Together (Full Pipeline)</h2>
+<p>
+  The <strong>Run Full Pipeline</strong> button executes all major components
+  automatically:
+</p>
+
+<ol>
+  <li>Extract frames from video</li>
+  <li>Run PIV analysis</li>
+  <li>Record or import IMU readings</li>
+  <li>Generate outputs</li>
+</ol>
+
+<p>
+  This is the recommended mode for new users who want a complete run without
+  configuring everything manually.
+</p>
+
+<hr>
+
+<h2>7. Common Troubleshooting Tips</h2>
+<ul>
+  <li>If the PIV result is empty → check your frame rate or frame folder.</li>
+  <li>If the IMU does not start → ensure the hardware is connected or try a
+      different USB port.</li>
+  <li>If videos will not extract → confirm they are .mp4 and not corrupted.</li>
+</ul>
+
+<p>
+  Each feature logs its steps to <code>script.log</code> so users can diagnose
+  any issues quickly.
+</p>
     </div>
   </main>
 </body>
