@@ -25,7 +25,7 @@ body {
   padding: 0.5rem 0.75rem;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* logo on left, nav on right */
+  justify-content: center;
 }
 
 .nav-links {
