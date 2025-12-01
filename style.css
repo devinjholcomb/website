@@ -66,3 +66,12 @@ body {
 .header-placeholder {
   min-height: 110px; /* reserves space before header loads */
 }
+
+.fullscreen-photo-under-header {
+  width: 100vw;
+  height: calc(100vh - 110px);   /* subtract header height */
+  background-image: url("smy.png");
+  background-size: cover;        /* fill the space */
+  background-position: center;   /* center the important part */
+  background-repeat: no-repeat;
+}
