@@ -7,8 +7,6 @@
 :root {
  --GL_L_purple: #c28df7;
  --GL_D_purple: #663399;
- --GL_L_green: rgb(131, 189, 131);
- --GL_D_green: rgb(24, 118, 24);
  --GL_L_blue: rgb(109, 109, 219);
  --GL_white: white;
 }
@@ -45,7 +43,7 @@ body {
 }
 
 .nav-link:hover {
-  color: var(--GL_D_purple);           /* brand color on hover */
+  color: var(--GL_L_blue);           /* brand color on hover */
 }
 
 .content {
