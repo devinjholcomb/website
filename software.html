@@ -47,9 +47,6 @@ cd &lt;your-repo-folder&gt;</code></pre>
   <li>From the project root, change into the setup folder:
     <pre><code>cd setup</code></pre>
   </li>
-  <li>Make the script executable (if needed):
-    <pre><code>chmod +x set_up_system.sh</code></pre>
-  </li>
   <li>Run the script:
     <pre><code>./set_up_system.sh</code></pre>
   </li>
@@ -69,39 +66,26 @@ cd &lt;your-repo-folder&gt;</code></pre>
   of software (the exact list is documented in the script itself):
 </p>
 <ul>
-  <li>Core runtime (e.g., Python and its package manager).</li>
+  <li>Core runtime.</li>
   <li>Libraries for camera access, video processing, and numerical computing.</li>
-  <li>Any additional utilities used by the SPEC pipeline (logging, plotting, etc.).</li>
+  <li>Any additional utilities used by the SPEC pipeline.</li>
 </ul>
 <p>
-  All of these come from standard package repositories (for example, your OS
-  package manager and language-specific repositories such as <em>pip</em>), so
-  users do not have to track down download links manually.
+  All of these come from standard package repositories
 </p>
-
 <h2>4. Verifying the installation</h2>
 <ol>
   <li>Return to the project root:
     <pre><code>cd ..</code></pre>
   </li>
-  <li>Run the main application command (replace with your real entry point):
-    <pre><code>python main.py</code></pre>
+  <li>Run the main application command: cd app
+    <pre><code>python3 app.py</code></pre>
   </li>
 </ol>
-
 <p>
   If the installation succeeded, the SPEC application should start without
   errors and display the main interface or command-line help message.
 </p>
-
-<h2>5. External resources and services</h2>
-<ul>
-  <li>All software used by SPEC is open-source and installed from public
-      repositories (system package manager and language package index).</li>
-  <li>If you later use any paid or cloud-based services (e.g., storage, logging,
-      or dashboards), list them here and note whether they have free tiers.</li>
-</ul>
-
     </div>
   </main>
 </body>
