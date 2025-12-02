@@ -15,178 +15,186 @@
       <h1>How to Use Each Feature</h1>
 
 <p>
-  This section explains every major feature of the SPEC application and how to
-  use it from the interface. Each feature listed below corresponds to work
-  completed during your sprint cycles (setup, PIV processing, IMU processing,
-  video extraction, etc.).
+  This page explains the main features available in the SPEC interface:
+  <strong>Calibration</strong> and <strong>PIV Functions</strong>. Together,
+  these tools let you align the camera view with the water surface, capture
+  frames, run PIV on them, and automatically repeat the process when conditions
+  are good.
 </p>
 
 <hr>
 
-<h2>1. Setup & Environment Initialization</h2>
+<h2>1. Calibration</h2>
+
 <p>
-  After installation, the first feature available is the <strong>Setup</strong>
-  process. This initializes the working directory, loads configuration files,
-  and prepares the system for running PIV and IMU processes.
+  The <strong>Calibration</strong> screen is used to align the camera view with
+  the physical water surface and define the trapezoid region where PIV will be
+  performed. Proper calibration is important for getting meaningful velocity
+  measurements.
 </p>
 
+<h3>Calibration Controls</h3>
 <ul>
-  <li>Go to the <strong>Setup</strong> section in the interface.</li>
-  <li>Press <strong>Initialize System</strong>.</li>
-  <li>The application will:
-    <ul>
-      <li>Verify dependencies are installed</li>
-      <li>Create required folders (frames/, imu_data/, logs/)</li>
-      <li>Check for connected hardware (camera, IMU)</li>
-    </ul>
-  </li>
+  <li><strong>Adjust camera tilt (up-down angle):</strong>
+    This control changes the vertical tilt of the camera in the transformed
+    view. Use it to match the apparent water surface to the expected horizontal
+    position.</li>
+
+  <li><strong>Set roll (side-to-side angle) to 0°:</strong>
+    The roll adjustment lets you correct any side-to-side rotation of the
+    camera. In most cases, you want the roll to be <strong>0°</strong> so that
+    the water surface appears level. If the image looks rotated, adjust this
+    until edges that should be horizontal look level.</li>
+
+  <li><strong>Move trapezoid points:</strong>
+    The trapezoid defines the region of interest for PIV. You can drag the
+    corner points to match the actual area on the water surface where you want
+    to measure velocity. The top edge usually represents the far shoreline and
+    the bottom edge the near edge of the measurement region.</li>
+
+  <li><strong>Show transformed image:</strong>
+    After adjusting tilt, roll, and trapezoid points, you can view the
+    <strong>transformed image</strong>. This shows how the camera view is
+    warped into a top-down–like reference frame used for PIV. Use this to
+    confirm that the region of interest is correctly aligned before running
+    PIV.</li>
 </ul>
 
 <p>
-  Once complete, the system will display a confirmation message and the next
-  features become available.
+  Once the calibration looks correct (angles set and trapezoid aligned), you
+  can move on to the PIV functions.
 </p>
 
 <hr>
 
-<h2>2. Extracting Frames From Video</h2>
+<h2>2. PIV Functions</h2>
+
 <p>
-  The <strong>Frame Extraction</strong> feature allows the user to input a video
-  file and automatically generate individual image frames for PIV analysis.
+  The <strong>PIV Functions</strong> section is where you actually run PIV on
+  captured frames. There are three main controls:
+  <strong>Run PIV</strong>, <strong>Start Auto PIV</strong>, and
+  <strong>Stop Auto PIV</strong>.
 </p>
 
-<ul>
-  <li>Navigate to the <strong>Video Processing</strong> page.</li>
-  <li>Click <strong>Select Video</strong> and choose your .mp4 file.</li>
-  <li>Choose the frame rate (e.g., 10 fps).</li>
-  <li>Click <strong>Extract Frames</strong>.</li>
-</ul>
+<h3>2.1 Run PIV (One-Shot Pipeline)</h3>
 
 <p>
-  The application will display progress (e.g., “Extracting frame 42 of 389”) and
-  store frames in the <code>frames/</code> directory.
-</p>
-
-<hr>
-
-<h2>3. Running PIV (Particle Image Velocimetry)</h2>
-<p>
-  Once the frames are extracted, the PIV feature calculates velocity fields by
-  comparing movement between consecutive frames.
-</p>
-
-<ul>
-  <li>Go to the <strong>PIV</strong> section.</li>
-  <li>Select the folder containing extracted frames.</li>
-  <li>Choose PIV parameters:
-    <ul>
-      <li>Interrogation window size</li>
-      <li>Pass count (single-pass, multi-pass)</li>
-      <li>Grid resolution</li>
-    </ul>
-  </li>
-  <li>Click <strong>Run PIV</strong>.</li>
-</ul>
-
-<p>
-  The system will process each frame pair and generate:
-</p>
-
-<ul>
-  <li>Velocity vector fields</li>
-  <li>Magnitude heatmaps</li>
-  <li>CSV outputs containing vector data</li>
-</ul>
-
-<p>
-  Results appear visually on the interface and are saved into the project’s
-  output folder.
-</p>
-
-<hr>
-
-<h2>4. IMU Data Collection & Processing</h2>
-<p>
-  If a physical IMU is connected, the application can record and display motion
-  readings from the river probe.
-</p>
-
-<ul>
-  <li>Navigate to <strong>IMU</strong>.</li>
-  <li>Click <strong>Start IMU Capture</strong>.</li>
-  <li>Move the sensor during the capture period.</li>
-  <li>Click <strong>Stop</strong> to end the recording.</li>
-</ul>
-
-<p>
-  The system automatically:
-</p>
-
-<ul>
-  <li>Stores raw IMU readings</li>
-  <li>Plots accelerometer/gyroscope signals</li>
-  <li>Saves the processed CSV file</li>
-</ul>
-
-<p>
-  If the IMU is not detected, the interface will show “IMU disabled” but still
-  allow replay of past data.
-</p>
-
-<hr>
-
-<h2>5. Viewing Results (Graphs, Vectors, Outputs)</h2>
-<p>
-  Once PIV and IMU data are processed, users can view the results in the
-  <strong>Results</strong> section.
-</p>
-
-<ul>
-  <li>View velocity magnitude heatmaps</li>
-  <li>Vector overlays on original frames</li>
-  <li>IMU acceleration and rotation plots</li>
-  <li>Download CSV outputs</li>
-</ul>
-
-<p>
-  Each result includes a timestamp and is automatically saved so users can
-  re-view previous runs.
-</p>
-
-<hr>
-
-<h2>6. Running Everything Together (Full Pipeline)</h2>
-<p>
-  The <strong>Run Full Pipeline</strong> button executes all major components
-  automatically:
+  The <strong>Run PIV</strong> button executes a full one-shot pipeline:
 </p>
 
 <ol>
-  <li>Extract frames from video</li>
-  <li>Run PIV analysis</li>
-  <li>Record or import IMU readings</li>
-  <li>Generate outputs</li>
+  <li><strong>Collect IMU data:</strong>
+    The system reads IMU data for this run (if available) so you can associate
+    motion measurements with the PIV results.</li>
+
+  <li><strong>Collect raw frames:</strong>
+    A batch of raw image frames is captured from the camera or loaded from the
+    current video source.</li>
+
+  <li><strong>Preprocess frames:</strong>
+    The raw frames are preprocessed (for example, cropping, filtering,
+    normalizing) to prepare them for the FFT-based PIV analysis.</li>
+
+  <li><strong>Compute the goodness metric:</strong>
+    The PIV output for this batch is evaluated with a
+    <strong>goodness metric</strong>. This metric measures the quality or
+    reliability of the velocity field. If the goodness metric is above a
+    configured threshold, the system considers the result acceptable.</li>
+
+  <li><strong>Statistic generation (if above threshold):</strong>
+    When the goodness metric is above the threshold, SPEC:
+    <ul>
+      <li>aggregates this batch’s results into the total statistics,</li>
+      <li>updates any summary values (averages, distributions, etc.),</li>
+      <li>and stores the results for later viewing.</li>
+    </ul>
+  </li>
+
+  <li><strong>Running the PIV (FFT process):</strong>
+    For each batch, SPEC sends the images through an FFT-based PIV computation:
+    <ul>
+      <li>image pairs are processed to find particle displacements,</li>
+      <li>velocity vectors are computed from those displacements,</li>
+      <li>and the resulting fields are collected.</li>
+    </ul>
+  </li>
+
+  <li><strong>Compiling and adding results:</strong>
+    The vectors and derived quantities from all processed frames in the batch
+    are compiled and added into the total results for the run.</li>
+
+  <li><strong>Generating PNGs and updating data visualization:</strong>
+    After PIV is complete, SPEC generates PNG images and updates plots / data
+    visualizations so you can see the velocity fields and related metrics
+    graphically.</li>
 </ol>
 
 <p>
-  This is the recommended mode for new users who want a complete run without
-  configuring everything manually.
+  In short, <strong>Run PIV</strong> performs the entire pipeline once:
+  capture → preprocess → analyze → check quality → update statistics and
+  visualizations.
+</p>
+
+<h3>2.2 Start Auto PIV</h3>
+
+<p>
+  The <strong>Start Auto PIV</strong> button enables a continuous,
+  looped version of the PIV pipeline:
+</p>
+
+<ul>
+  <li>The system repeatedly captures new batches of frames.</li>
+  <li>Each batch is passed through the same one-shot pipeline (IMU, preprocess,
+      PIV, goodness metric, statistics, visualization).</li>
+  <li>After each run, SPEC checks the <strong>goodness metric</strong>.</li>
+  <li>If the metric stays above the threshold, the loop continues and
+      <strong>Run PIV</strong> is called again automatically.</li>
+</ul>
+
+<p>
+  This mode is useful when you want ongoing measurements over time, as long as
+  the image quality remains acceptable.
+</p>
+
+<h3>2.3 Stop Auto PIV</h3>
+
+<p>
+  The <strong>Stop Auto PIV</strong> button stops the continuous Auto PIV loop.
+  Once you click this:
+</p>
+
+<ul>
+  <li>No further batches are captured automatically.</li>
+  <li>No more calls to the one-shot <strong>Run PIV</strong> pipeline are made.</li>
+  <li>The interface remains available to view results or run a manual
+      one-shot PIV again if desired.</li>
+</ul>
+
+<p>
+  This gives the operator full control: you can test a single run with
+  <strong>Run PIV</strong>, then switch to continuous processing with
+  <strong>Start Auto PIV</strong>, and stop it at any time with
+  <strong>Stop Auto PIV</strong>.
 </p>
 
 <hr>
 
-<h2>7. Common Troubleshooting Tips</h2>
-<ul>
-  <li>If the PIV result is empty → check your frame rate or frame folder.</li>
-  <li>If the IMU does not start → ensure the hardware is connected or try a
-      different USB port.</li>
-  <li>If videos will not extract → confirm they are .mp4 and not corrupted.</li>
-</ul>
+<h2>Summary</h2>
 
 <p>
-  Each feature logs its steps to <code>script.log</code> so users can diagnose
-  any issues quickly.
+  In summary, the main workflow is:
 </p>
+
+<ol>
+  <li>Use <strong>Calibration</strong> to adjust tilt, roll, and trapezoid
+      points and verify the transformed image.</li>
+  <li>Use <strong>Run PIV</strong> to perform a single full pipeline run and
+      inspect the results.</li>
+  <li>When you are satisfied with the setup, use
+      <strong>Start Auto PIV</strong> for continuous measurements, and
+      <strong>Stop Auto PIV</strong> to halt the loop.</li>
+</ol>
+
     </div>
   </main>
 </body>
