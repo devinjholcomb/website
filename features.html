@@ -12,188 +12,225 @@
   <script src="header.js" defer></script>
   <main>
     <div class="content">
-      <h1>How to Use Each Feature</h1>
+      <h1>Features and How to Use Them</h1>
 
 <p>
-  This page explains the main features available in the SPEC interface:
-  <strong>Calibration</strong> and <strong>PIV Functions</strong>. Together,
-  these tools let you align the camera view with the water surface, capture
-  frames, run PIV on them, and automatically repeat the process when conditions
-  are good.
+  This section documents the features implemented by our team during the project
+  sprints. These features are all located inside the “PIV Functions” area of the
+  application and include automated flow analysis, quality detection, camera
+  optimization tools, and system-level sanity checks. Each feature includes
+  what it does, how to use it, the results it produces, and how it connects to
+  other components in the software.
 </p>
 
 <hr>
 
-<h2>1. Calibration</h2>
+<h2>1. Run PIV (One-Shot PIV Pipeline)</h2>
 
 <p>
-  The <strong>Calibration</strong> screen is used to align the camera view with
-  the physical water surface and define the trapezoid region where PIV will be
-  performed. Proper calibration is important for getting meaningful velocity
-  measurements.
+  <strong>Run PIV</strong> executes a complete single pass of the PIV pipeline.
+  It was one of the major features built by our team. When activated, it
+  collects camera data, evaluates frame quality using our machine learning
+  model, and produces full PIV results.
 </p>
 
-<h3>Calibration Controls</h3>
+<h3>How to Use</h3>
 <ul>
-  <li><strong>Adjust camera tilt (up-down angle):</strong>
-    This control changes the vertical tilt of the camera in the transformed
-    view. Use it to match the apparent water surface to the expected horizontal
-    position.</li>
-
-  <li><strong>Set roll (side-to-side angle) to 0°:</strong>
-    The roll adjustment lets you correct any side-to-side rotation of the
-    camera. In most cases, you want the roll to be <strong>0°</strong> so that
-    the water surface appears level. If the image looks rotated, adjust this
-    until edges that should be horizontal look level.</li>
-
-  <li><strong>Move trapezoid points:</strong>
-    The trapezoid defines the region of interest for PIV. You can drag the
-    corner points to match the actual area on the water surface where you want
-    to measure velocity. The top edge usually represents the far shoreline and
-    the bottom edge the near edge of the measurement region.</li>
-
-  <li><strong>Show transformed image:</strong>
-    After adjusting tilt, roll, and trapezoid points, you can view the
-    <strong>transformed image</strong>. This shows how the camera view is
-    warped into a top-down–like reference frame used for PIV. Use this to
-    confirm that the region of interest is correctly aligned before running
-    PIV.</li>
+  <li>Go to the <strong>PIV Functions</strong> page.</li>
+  <li>Click <strong>Run PIV</strong>.</li>
 </ul>
 
-<p>
-  Once the calibration looks correct (angles set and trapezoid aligned), you
-  can move on to the PIV functions.
-</p>
-
-<hr>
-
-<h2>2. PIV Functions</h2>
-
-<p>
-  The <strong>PIV Functions</strong> section is where you actually run PIV on
-  captured frames. There are three main controls:
-  <strong>Run PIV</strong>, <strong>Start Auto PIV</strong>, and
-  <strong>Stop Auto PIV</strong>.
-</p>
-
-<h3>2.1 Run PIV (One-Shot Pipeline)</h3>
-
-<p>
-  The <strong>Run PIV</strong> button executes a full one-shot pipeline:
-</p>
-
+<h3>What Run PIV Does</h3>
 <ol>
-  <li><strong>Collect IMU data:</strong>
-    The system reads IMU data for this run (if available) so you can associate
-    motion measurements with the PIV results.</li>
-
-  <li><strong>Collect raw frames:</strong>
-    A batch of raw image frames is captured from the camera or loaded from the
-    current video source.</li>
-
-  <li><strong>Preprocess frames:</strong>
-    The raw frames are preprocessed (for example, cropping, filtering,
-    normalizing) to prepare them for the FFT-based PIV analysis.</li>
-
-  <li><strong>Compute the goodness metric:</strong>
-    The PIV output for this batch is evaluated with a
-    <strong>goodness metric</strong>. This metric measures the quality or
-    reliability of the velocity field. If the goodness metric is above a
-    configured threshold, the system considers the result acceptable.</li>
-
-  <li><strong>Statistic generation (if above threshold):</strong>
-    When the goodness metric is above the threshold, SPEC:
+  <li>Captures raw camera frames.</li>
+  <li>Applies our <strong>ML blur-detection model</strong> to each frame:
     <ul>
-      <li>aggregates this batch’s results into the total statistics,</li>
-      <li>updates any summary values (averages, distributions, etc.),</li>
-      <li>and stores the results for later viewing.</li>
+      <li>estimates blur level,</li>
+      <li>outputs confidence score,</li>
+      <li>determines if quality is acceptable.</li>
     </ul>
   </li>
-
-  <li><strong>Running the PIV (FFT process):</strong>
-    For each batch, SPEC sends the images through an FFT-based PIV computation:
+  <li>Performs all PIV preprocessing (cropping, filtering, normalization).</li>
+  <li>Runs FFT-based PIV to compute velocity vectors.</li>
+  <li>Generates:
     <ul>
-      <li>image pairs are processed to find particle displacements,</li>
-      <li>velocity vectors are computed from those displacements,</li>
-      <li>and the resulting fields are collected.</li>
+      <li>PNG heatmaps,</li>
+      <li>vector field images,</li>
+      <li>statistics files.</li>
     </ul>
   </li>
-
-  <li><strong>Compiling and adding results:</strong>
-    The vectors and derived quantities from all processed frames in the batch
-    are compiled and added into the total results for the run.</li>
-
-  <li><strong>Generating PNGs and updating data visualization:</strong>
-    After PIV is complete, SPEC generates PNG images and updates plots / data
-    visualizations so you can see the velocity fields and related metrics
-    graphically.</li>
+  <li>Updates the <strong>Data Visualization</strong> page with the results.</li>
 </ol>
 
-<p>
-  In short, <strong>Run PIV</strong> performs the entire pipeline once:
-  capture → preprocess → analyze → check quality → update statistics and
-  visualizations.
-</p>
-
-<h3>2.2 Start Auto PIV</h3>
-
-<p>
-  The <strong>Start Auto PIV</strong> button enables a continuous,
-  looped version of the PIV pipeline:
-</p>
-
+<h3>How This Feature Links to Others</h3>
 <ul>
-  <li>The system repeatedly captures new batches of frames.</li>
-  <li>Each batch is passed through the same one-shot pipeline (IMU, preprocess,
-      PIV, goodness metric, statistics, visualization).</li>
-  <li>After each run, SPEC checks the <strong>goodness metric</strong>.</li>
-  <li>If the metric stays above the threshold, the loop continues and
-      <strong>Run PIV</strong> is called again automatically.</li>
+  <li>The ML blur/quality score determines whether Auto PIV will run
+      successfully.</li>
+  <li>All generated outputs feed directly into the visualization dashboard.</li>
+  <li>Camera optimization and sanity check tools improve the inputs used by
+      this function.</li>
 </ul>
 
-<p>
-  This mode is useful when you want ongoing measurements over time, as long as
-  the image quality remains acceptable.
-</p>
+<hr>
 
-<h3>2.3 Stop Auto PIV</h3>
+<h2>2. Start Auto PIV (Continuous Automated Loop)</h2>
 
 <p>
-  The <strong>Stop Auto PIV</strong> button stops the continuous Auto PIV loop.
-  Once you click this:
+  <strong>Start Auto PIV</strong> creates an automated loop that repeatedly
+  triggers the Run PIV process. Our team built the logic for quality-driven
+  looping based on ML predictions.
 </p>
 
+<h3>How to Use</h3>
 <ul>
-  <li>No further batches are captured automatically.</li>
-  <li>No more calls to the one-shot <strong>Run PIV</strong> pipeline are made.</li>
-  <li>The interface remains available to view results or run a manual
-      one-shot PIV again if desired.</li>
+  <li>Go to <strong>PIV Functions</strong>.</li>
+  <li>Click <strong>Start Auto PIV</strong>.</li>
 </ul>
 
+<h3>What Auto PIV Does</h3>
+<ul>
+  <li>Collects new frames at regular intervals.</li>
+  <li>Uses the ML quality model (blur + confidence score) to evaluate each
+      batch.</li>
+  <li>If the quality score is above threshold:
+    <ul>
+      <li>Run PIV is activated,</li>
+      <li>new results are generated,</li>
+      <li>visualizations are updated.</li>
+    </ul>
+  </li>
+  <li>If quality drops below threshold:
+    <ul>
+      <li>Auto PIV pauses automatically,</li>
+      <li>the user is notified,</li>
+      <li>no invalid data is processed.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3>How Auto PIV Links to Other Features</h3>
+<ul>
+  <li>Auto PIV depends directly on the <strong>Run PIV</strong> pipeline.</li>
+  <li>QualityDetection determines whether each loop iteration will run.</li>
+  <li>Camera Optimization tools help increase ML confidence scores.</li>
+</ul>
+
+<hr>
+
+<h2>3. Stop Auto PIV</h2>
+
 <p>
-  This gives the operator full control: you can test a single run with
-  <strong>Run PIV</strong>, then switch to continuous processing with
-  <strong>Start Auto PIV</strong>, and stop it at any time with
-  <strong>Stop Auto PIV</strong>.
+  <strong>Stop Auto PIV</strong> immediately halts the continuous loop. This
+  allows users to interrupt processing at any time.
 </p>
+
+<h3>How to Use</h3>
+<ul>
+  <li>Click <strong>Stop Auto PIV</strong> at any moment during Auto PIV.</li>
+</ul>
+
+<h3>Results / Interactions</h3>
+<ul>
+  <li>Looping ends instantly.</li>
+  <li>No additional PIV runs are triggered.</li>
+  <li>The most recent results remain available on the visualization page.</li>
+</ul>
+
+<hr>
+
+<h2>4. Machine Learning Quality Detection Model</h2>
+
+<p>
+  One of our team’s primary contributions was building a machine learning model
+  capable of determining frame quality before PIV execution. This prevents bad
+  data from entering the pipeline.
+</p>
+
+<h3>Outputs of the Quality Model</h3>
+<ul>
+  <li><strong>Blur score</strong> (numerical estimate of sharpness)</li>
+  <li><strong>Confidence score</strong> (certainty of prediction)</li>
+  <li><strong>Pass/fail decision</strong> for triggering Run PIV</li>
+</ul>
+
+<h3>How It Links to Other Features</h3>
+<ul>
+  <li>Directly controls whether Auto PIV continues looping.</li>
+  <li>Ensures Run PIV only executes on high-quality frames.</li>
+  <li>Improves reliability of all PIV results.</li>
+</ul>
+
+<hr>
+
+<h2>5. QualityDetection Module</h2>
+
+<p>
+  The <strong>QualityDetection.py</strong> module is a standalone component
+  created for evaluating every captured frame. It integrates our machine
+  learning model and performs additional metrics such as the goodness score used
+  to determine processing quality.
+</p>
+
+<h3>Responsibilities</h3>
+<ul>
+  <li>Loads ML model.</li>
+  <li>Runs blur/confidence analysis on each incoming frame.</li>
+  <li>Computes a “goodness metric.”</li>
+  <li>Returns decision values used by Auto PIV and Run PIV.</li>
+</ul>
+
+<hr>
+
+<h2>6. Camera Optimization Tools</h2>
+
+<p>
+  The <strong>camera optimization utilities</strong> help the system determine
+  the best camera settings and improve ML predictions before running PIV.</p>
+
+<h3>What These Tools Do</h3>
+<ul>
+  <li>Test lighting and exposure consistency.</li>
+  <li>Adjust camera parameters to reduce blur.</li>
+  <li>Provide feedback that increases ML confidence scores.</li>
+</ul>
+
+<hr>
+
+<h2>7. Sanity Check Module</h2>
+
+<p>
+  The <strong>Sanity Check</strong> feature validates that all system components
+  are working before executing PIV tasks.</p>
+
+<h3>The Sanity Check Verifies</h3>
+<ul>
+  <li>Camera is connected and producing frames.</li>
+  <li>ML models are loaded correctly.</li>
+  <li>Paths for saving PNGs and statistics exist.</li>
+  <li>FFT/PIV libraries are functional.</li>
+</ul>
+
+<h3>How It Links to Other Features</h3>
+<ul>
+  <li>Prevents errors before running Run PIV.</li>
+  <li>Ensures Auto PIV loops do not crash mid-run.</li>
+</ul>
 
 <hr>
 
 <h2>Summary</h2>
-
-<p>
-  In summary, the main workflow is:
-</p>
-
-<ol>
-  <li>Use <strong>Calibration</strong> to adjust tilt, roll, and trapezoid
-      points and verify the transformed image.</li>
-  <li>Use <strong>Run PIV</strong> to perform a single full pipeline run and
-      inspect the results.</li>
-  <li>When you are satisfied with the setup, use
-      <strong>Start Auto PIV</strong> for continuous measurements, and
-      <strong>Stop Auto PIV</strong> to halt the loop.</li>
-</ol>
+<ul>
+  <li><strong>Run PIV</strong>: one-shot pipeline using ML-driven quality
+      validation.</li>
+  <li><strong>Start Auto PIV</strong>: continuous loop controlled by quality
+      predictions.</li>
+  <li><strong>Stop Auto PIV</strong>: ends looping immediately.</li>
+  <li><strong>ML Model + QualityDetection</strong>: ensures only valid frames
+      are processed.</li>
+  <li><strong>Camera Optimization</strong>: improves image quality and ML
+      confidence.</li>
+  <li><strong>Sanity Check</strong>: verifies system readiness.</li>
+</ul>
 
     </div>
   </main>
