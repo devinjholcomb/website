@@ -12,154 +12,220 @@
   <script src="header.js" defer></script>
   <main>
     <div class="content">
-      <h1>How to Modify or Extend SPEC</h1>
+      <h1>How to Modify or Extend the SPEC Software</h1>
 
 <p>
-  This page explains how someone who has already installed SPEC can make changes
-  to the code: where the important files live, how to run the project in
-  development mode, and how to run tests after making edits.
+  This page explains how someone who has already installed the SPEC
+  application can safely make changes or extend the system. It covers what
+  languages and tools are used, where dependencies are defined, how features
+  are organized, where the backlog and bug list live, style expectations, and
+  how to run automated tests.
 </p>
 
 <hr>
 
-<h2>Project Structure</h2>
-
-<p>The project is organized into a few main folders:</p>
-
-<ul>
-  <li><code>setup/</code> – install script (<code>set_up_system.sh</code>) and any environment helpers.</li>
-  <li><code>src/</code> – main application source code (PIV, IMU, video processing, Flask app, etc.).</li>
-  <li><code>piv/</code> – PIV processing code (frame loading, correlation, velocity computation).</li>
-  <li><code>imu/</code> – IMU handling code (reading sensor, parsing data, plotting).</li>
-  <li><code>web/</code> – frontend templates, static files, and Flask routes.</li>
-  <li><code>tests/</code> – automated test cases for core modules.</li>
-  <li><code>data/</code> or <code>examples/</code> – example videos and sample IMU data.</li>
-</ul>
+<h2>1. Making Changes After Installation</h2>
 
 <p>
-  (If your folder names are slightly different, adjust these bullets to match
-  your real layout.)
-</p>
-
-<hr>
-
-<h2>Languages and Build / Dependency Management</h2>
-
-<ul>
-  <li><strong>Language:</strong> Python 3 (replace with the exact version you use).</li>
-  <li><strong>Main entry point:</strong> something like <code>src/app.py</code> or <code>src/main.py</code>.</li>
-  <li><strong>Dependencies:</strong> listed in <code>requirements.txt</code> (or your actual file) and installed by <code>setup/set_up_system.sh</code>.</li>
-  <li><strong>Web framework:</strong> Flask (for the UI/API serving pages like the PIV and IMU screens).</li>
-</ul>
-
-<p>
-  To add or update a dependency, you typically:
+  After following the installation instructions (cloning the repository,
+  creating a virtual environment, and installing dependencies), a developer
+  can modify the software by:
 </p>
 
 <ol>
-  <li>Install it locally with <code>pip install &lt;package-name&gt;</code>.</li>
-  <li>Add it to <code>requirements.txt</code> (or your dependency file).</li>
-  <li>Re-run <code>setup/set_up_system.sh</code> or reinstall requirements on new machines.</li>
+  <li>Opening the project folder in their IDE (e.g., VS Code).</li>
+  <li>Activating the project virtual environment:
+    <pre><code>source venv/bin/activate   # Linux / macOS / WSL
+# or
+venv\Scripts\activate      # Windows PowerShell / CMD</code></pre>
+  </li>
+  <li>Identifying the module they want to change:
+    <ul>
+      <li><code>app/app.py</code> – main application entry point and routing logic.</li>
+      <li><code>ml_utils/QualityDetection.py</code> – ML-based blur / quality scoring.</li>
+      <li><code>camera_utils/</code> (or equivalent) – camera handling and optimization.</li>
+      <li><code>piv_utils/</code> (or equivalent) – PIV processing and FFT operations.</li>
+    </ul>
+  </li>
+  <li>Creating a new Git branch for the change:
+    <pre><code>git checkout -b feature/&lt;short-description&gt;</code></pre>
+  </li>
+  <li>Editing the Python files, saving changes, and running the app:
+    <pre><code>python app/app.py</code></pre>
+  </li>
 </ol>
+
+<p>
+  All major behavior (Run PIV, Start Auto PIV, Stop Auto PIV, ML quality
+  detection, camera optimization, and sanity checks) is implemented in Python,
+  so most modifications will involve updating Python functions and classes.
+</p>
 
 <hr>
 
-<h2>Running SPEC in Development Mode</h2>
+<h2>2. Languages, Compiler, and Build / Dependency Management</h2>
 
-<p>After cloning and installing, you can run SPEC from the project root:</p>
+<ul>
+  <li><strong>Primary language:</strong> Python 3 (the project is ~90% Python).</li>
+  <li><strong>Supporting languages:</strong> HTML / CSS / JavaScript for the web UI,
+      but no separate frontend build system is required.</li>
+  <li><strong>Compiler:</strong> Not applicable in the traditional sense; Python is
+      interpreted. Native libraries (e.g., NumPy, PyTorch) are installed via wheels.</li>
+  <li><strong>Dependency management:</strong> handled with <code>pip</code>
+      inside a virtual environment.</li>
+</ul>
 
-<pre><code>cd spec-project          # replace with your actual folder
-python src/app.py        # or python main.py / flask run / etc.
+<p>
+  Dependencies are listed in:
+</p>
+<ul>
+  <li><code>requirements.txt</code> (Python packages, including ML and PIV libraries).</li>
+  <li><code>setup/set_up_system.sh</code> (shell script that installs system-level
+      requirements and then runs <code>pip install -r requirements.txt</code>).</li>
+</ul>
+
+<p>
+  These files should be updated whenever new Python packages or system tools are
+  required by new features.
+</p>
+
+<h3>Automated Builds</h3>
+<p>
+  At present, there are <strong>no fully automated CI builds</strong> configured
+  (e.g., GitHub Actions, Jenkins) for this project. Builds and tests are run
+  locally by developers inside the project virtual environment. Setting up an
+  automated pipeline is a recommended future improvement.
+</p>
+
+<hr>
+
+<h2>3. Backlog and Bug Tracking</h2>
+
+<p>
+  The project backlog and bug list are tracked using the repository’s online
+  issue tracker and project board:
+</p>
+
+<ul>
+  <li><strong>Backlog:</strong> feature requests, planned enhancements, and technical debt items
+      are recorded as issues in the repository (e.g., GitHub Issues) and grouped
+      into milestones or a project board by sprint.</li>
+  <li><strong>Bug list:</strong> bugs found during development or testing are also filed as issues,
+      labeled appropriately (e.g., “bug”, “PIV”, “ML”, “UI”).</li>
+</ul>
+
+<h3>Examples of Major Ongoing / Future Issues</h3>
+<ul>
+  <li><strong>Migration to newer Python versions:</strong> As Python and the OS evolve
+      (e.g., Python 3.12 with externally managed environments), the project will
+      need periodic updates to ensure all dependencies still install correctly
+      inside a virtual environment.</li>
+  <li><strong>ML model and library upgrades:</strong> Updating to newer versions of
+      PyTorch or other ML frameworks may require retraining or converting
+      existing models and adjusting the <code>QualityDetection</code> code.</li>
+  <li><strong>Scaling to better hardware resources:</strong> Future deployments
+      might move from CPU-only to GPU-enabled systems for faster PIV and ML
+      inference, which would require configuration and dependency updates.</li>
+</ul>
+
+<p>
+  New contributors should always check the issue tracker before starting work to
+  avoid duplicating efforts and to see current priorities.
+</p>
+
+<hr>
+
+<h2>4. Code Style and Expectations</h2>
+
+<p>
+  To keep the codebase consistent and maintainable, developers are expected to
+  follow these style guidelines:
+</p>
+
+<ul>
+  <li><strong>Python style:</strong> follow PEP 8 (standard Python style guide).</li>
+  <li><strong>Naming:</strong>
+    <ul>
+      <li>Modules and files: <code>lowercase_with_underscores.py</code></li>
+      <li>Classes: <code>CamelCase</code></li>
+      <li>Functions and variables: <code>lower_snake_case</code></li>
+    </ul>
+  </li>
+  <li><strong>Functions:</strong> keep them focused; each function should have a
+      clear, single responsibility (e.g., “compute_goodness_metric” rather than
+      “do_everything”).</li>
+  <li><strong>Docstrings:</strong> add a short docstring to new public functions,
+      especially in core modules like <code>QualityDetection</code> and PIV
+      utilities, explaining inputs, outputs, and side effects.</li>
+  <li><strong>Logging:</strong> use the project’s logging utilities instead of
+      <code>print()</code> for runtime messages (for example, when Auto PIV
+      loops or when the quality metric fails).</li>
+  <li><strong>Comments:</strong> focus on “why” not “what” – the code itself
+      should explain what is happening; comments should explain non-obvious
+      decisions or domain-specific logic.</li>
+</ul>
+
+<p>
+  When adding new features, follow the structure and naming used in the existing
+  PIV functions, Auto PIV loop, quality detection, camera optimization, and
+  sanity check modules.
+</p>
+
+<hr>
+
+<h2>5. Automated Testing</h2>
+
+<p>
+  The project includes automated tests to help ensure that changes do not break
+  existing functionality. Test files are stored under:
+</p>
+
+<ul>
+  <li><code>tests/</code> – unit tests for core utilities (e.g., PIV math, ML helpers).</li>
+  <li><code>tests/test_quality_detection.py</code> (example) – tests for
+      QualityDetection model integration and goodness metric calculations.</li>
+</ul>
+
+<p>
+  Tests are run from the project root with:
+</p>
+
+<pre><code>source venv/bin/activate      # activate virtual environment (if not already)
+pytest                        # if using pytest
+# or
+python -m unittest            # if using the standard library test runner
 </code></pre>
 
 <p>
-  The application will start the web server (if using Flask) and print the URL,
-  such as <code>http://127.0.0.1:5000</code>. Open this address in a browser to
-  see the UI while you are editing code.
+  Before submitting changes or opening a merge request, developers should:
 </p>
 
-<hr>
-
-<h2>Making Code Changes</h2>
-
 <ol>
-  <li>Make sure the project runs in its current state (no failing tests or errors).</li>
-  <li>Create a new Git branch (recommended):
-    <pre><code>git checkout -b feature/new-piv-option</code></pre>
-  </li>
-  <li>Find the module that matches what you want to change:
+  <li>Run the full test suite locally.</li>
+  <li>Add new test cases for any new feature, especially changes to:
     <ul>
-      <li>PIV behavior → files in <code>piv/</code></li>
-      <li>IMU behavior → files in <code>imu/</code></li>
-      <li>Web pages / routes → files in <code>web/</code> or <code>src/routes.py</code></li>
+      <li>Run PIV behavior</li>
+      <li>Auto PIV loop logic</li>
+      <li>ML quality thresholds / scoring</li>
+      <li>Camera optimization or sanity check logic</li>
     </ul>
-  </li>
-  <li>Edit the code and save your changes.</li>
-  <li>Restart the app (if needed) and test your change manually.</li>
-  <li>Run the automated tests (see below).</li>
-  <li>Commit and push your changes:
-    <pre><code>git add .
-git commit -m "Describe what you changed"
-git push</code></pre>
   </li>
 </ol>
 
 <hr>
 
-<h2>Backlog and Issue Tracking</h2>
-
-<p>
-  We track remaining work, bugs, and new feature ideas using
-  <strong>GitHub Issues</strong> (or whatever you actually use).
-</p>
+<h2>Summary</h2>
 
 <ul>
-  <li>Each bug or feature request should have its own issue.</li>
-  <li>The issue should describe the problem, expected behavior, and any steps to reproduce.</li>
-  <li>When you start working on an issue, reference its number in your Git branch name and commits (e.g., <code>feature/#12-add-export-option</code>).</li>
+  <li>The project is primarily Python-based and runs inside a virtual
+      environment using <code>pip</code>-managed dependencies.</li>
+  <li>All major features (Run PIV, Auto PIV, ML quality detection, camera
+      optimization, sanity checking) can be extended by editing the Python
+      modules under the main app and utility folders.</li>
+  <li>Backlog and bugs are tracked in the repository’s issue tracker.</li>
+  <li>Developers are expected to follow PEP 8 style, add tests for new code, and
+      run automated tests before committing changes.</li>
 </ul>
-
-<p>
-  This backlog acts as the project’s “to-do list,” and someone new to SPEC can
-  read through the issues to see what still needs improvement.
-</p>
-
-<hr>
-
-<h2>Running Automated Tests</h2>
-
-<p>
-  After modifying the code, you should run the test suite to make sure nothing
-  was broken.
-</p>
-
-<ul>
-  <li>Test files live under <code>tests/</code> (e.g., <code>tests/test_piv.py</code>, <code>tests/test_imu.py</code>).</li>
-  <li>From the project root, run:
-    <pre><code>pytest</code></pre>
-    or
-    <pre><code>python -m unittest</code></pre>
-    (use whichever command your project actually uses).
-  </li>
-  <li>All tests should pass before you commit and push changes.</li>
-</ul>
-
-<hr>
-
-<h2>Code Style and Expectations</h2>
-
-<ul>
-  <li>Follow standard Python style (PEP 8) for names, spacing, and imports.</li>
-  <li>Keep functions focused: one clear responsibility per function.</li>
-  <li>Add comments where behavior is not obvious, especially around PIV math or IMU calibration.</li>
-  <li>If you add a new module or function, add at least one test for it under <code>tests/</code>.</li>
-</ul>
-
-<p>
-  By following these guidelines, contributors can safely extend SPEC with new
-  sensors, new analysis options, or new visualization features without breaking
-  existing functionality.
-</p>
 
     </div>
   </main>
